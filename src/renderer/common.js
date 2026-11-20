@@ -1,6 +1,6 @@
 'use strict';
 
-/* Helper yang dipakai bersama oleh jendela notch dan jendela utama. */
+
 
 const NF = (() => {
   const MODE_LABEL = {
@@ -29,13 +29,13 @@ const NF = (() => {
 
   const pad = (n) => String(n).padStart(2, '0');
 
-  function fmtTime(sec) {
-    sec = Math.max(0, Math.floor(sec));
-    const h = Math.floor(sec / 3600);
-    const m = Math.floor((sec % 3600) / 60);
-    const s = sec % 60;
-    return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
-  }
+    function fmtTime(sec) {
+      sec = Math.max(0, Math.floor(sec));
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+    }
 
   function fmtMinutes(min) {
     if (min < 60) return `${min} mnt`;
@@ -80,7 +80,6 @@ const NF = (() => {
     return new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(new Date(y, m - 1, d));
   }
 
-  /** ISO -> nilai untuk <input type="datetime-local"> (waktu lokal). */
   function toLocalInput(iso) {
     if (!iso) return '';
     const d = new Date(iso);
@@ -93,18 +92,17 @@ const NF = (() => {
     return Number.isNaN(d.getTime()) ? null : d.toISOString();
   }
 
-  /** Urutan tugas: belum selesai dulu, deadline terdekat dulu, tanpa deadline paling akhir. */
-  function sortTasks(tasks) {
-    return [...tasks].sort((a, b) => {
-      if (a.done !== b.done) return a.done ? 1 : -1;
-      const da = a.deadline ? new Date(a.deadline).getTime() : Infinity;
-      const db = b.deadline ? new Date(b.deadline).getTime() : Infinity;
-      if (da !== db) return da - db;
-      return new Date(a.createdAt) - new Date(b.createdAt);
-    });
-  }
+    function sortTasks(tasks) {
+      return [...tasks].sort((a, b) => {
+        if (a.done !== b.done) return a.done ? 1 : -1;
+        const da = a.deadline ? new Date(a.deadline).getTime() : Infinity;
+        const db = b.deadline ? new Date(b.deadline).getTime() : Infinity;
+        if (da !== db) return da - db;
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      });
+    }
 
-  /** Pembuat elemen DOM yang aman (teks selalu lewat textContent). */
+
   function h(tag, attrs, ...children) {
     const el = document.createElement(tag);
     if (attrs) {
@@ -124,7 +122,7 @@ const NF = (() => {
     return el;
   }
 
-  // ---------- suara (Web Audio, tanpa file audio) ----------
+
 
   let audioCtx = null;
 
@@ -157,7 +155,7 @@ const NF = (() => {
         tone(987.77, 0, 0.6, 0.15);
       }
     } catch (_) {
-      /* audio tidak tersedia, abaikan */
+
     }
   }
 

@@ -72,7 +72,7 @@ h3 {
   text-align: center;
 }
 
-/* ---------------------------------------------------------------- layout */
+
 
 .app {
   display: grid;
@@ -226,7 +226,6 @@ kbd {
   margin-top: 14px;
 }
 
-/* ---------------------------------------------------------------- form elemen */
 
 .field {
   width: 100%;
@@ -395,7 +394,7 @@ label > span:first-child {
   font-weight: 400;
 }
 
-/* ---------------------------------------------------------------- fokus */
+
 
 .focus-grid {
   display: grid;
@@ -563,7 +562,6 @@ label > span:first-child {
   color: var(--bad);
 }
 
-/* ---------------------------------------------------------------- tugas */
 
 .form-grid {
   display: grid;
@@ -728,7 +726,6 @@ label > span:first-child {
   border-radius: 14px;
 }
 
-/* ---------------------------------------------------------------- statistik */
 
 .stat-cards {
   display: grid;

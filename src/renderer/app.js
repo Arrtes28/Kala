@@ -29,7 +29,6 @@
   let editingId = null;
   let selectKey = '';
 
-  // ---------------------------------------------------------------- navigasi
 
   function switchTab(tab) {
     if (!document.getElementById('tab-' + tab)) return;
@@ -43,7 +42,7 @@
   });
   api.onNav(switchTab);
 
-  // ---------------------------------------------------------------- bagian statis
+
 
   function buildStatic() {
     $('btnReset').innerHTML = ICONS.reset;
@@ -66,7 +65,7 @@
     $('btnTestSound').addEventListener('click', () => NF.playSound('focus-end'));
   }
 
-  // ---------------------------------------------------------------- fokus
+
 
   function renderTimer() {
     const t = S.timer;
@@ -128,21 +127,21 @@
     sel.value = S.timer && S.timer.taskId ? S.timer.taskId : '';
   }
 
-  function renderUpcoming() {
-    const list = $('upcoming');
-    const items = sortTasks(S.tasks)
-      .filter((t) => !t.done && t.deadline)
-      .slice(0, 4);
-    list.replaceChildren();
-    if (!items.length) {
-      list.append(h('li', null, h('span', { class: 't muted' }, 'Belum ada tugas dengan deadline.')));
-      return;
+    function renderUpcoming() {
+      const list = $('upcoming');
+      const items = sortTasks(S.tasks)
+        .filter((t) => !t.done && t.deadline)
+        .slice(0, 4);
+      list.replaceChildren();
+      if (!items.length) {
+        list.append(h('li', null, h('span', { class: 't muted' }, 'Belum ada tugas dengan deadline.')));
+        return;
+      }
+      for (const t of items) {
+        const info = deadlineInfo(t.deadline, false);
+        list.append(h('li', null, h('span', { class: 't' }, t.title), h('span', { class: 'd ' + info.level }, info.text)));
+      }
     }
-    for (const t of items) {
-      const info = deadlineInfo(t.deadline, false);
-      list.append(h('li', null, h('span', { class: 't' }, t.title), h('span', { class: 'd ' + info.level }, info.text)));
-    }
-  }
 
   function renderSideStats() {
     const st = S.stats;
@@ -152,7 +151,6 @@
     $('streakNum').textContent = st.streak;
   }
 
-  // ---------------------------------------------------------------- tugas
 
   function renderBadge() {
     const pending = S.tasks.filter((t) => !t.done).length;
@@ -161,12 +159,12 @@
     badge.textContent = pending;
   }
 
-  function matchesFilter(task, now) {
-    if (filter === 'open') return !task.done;
-    if (filter === 'done') return task.done;
-    if (filter === 'overdue') return !task.done && task.deadline && new Date(task.deadline).getTime() < now;
-    return true;
-  }
+    function matchesFilter(task, now) {
+      if (filter === 'open') return !task.done;
+      if (filter === 'done') return task.done;
+      if (filter === 'overdue') return !task.done && task.deadline && new Date(task.deadline).getTime() < now;
+      return true;
+    }
 
   function renderFilters() {
     const now = Date.now();
@@ -188,13 +186,12 @@
     );
   }
 
-  // Hitung jumlah per filter tanpa mengubah filter aktif.
-  function filterCount(task, key, now) {
-    if (key === 'open') return !task.done;
-    if (key === 'done') return task.done;
-    if (key === 'overdue') return !task.done && task.deadline && new Date(task.deadline).getTime() < now;
-    return true;
-  }
+    function filterCount(task, key, now) {
+      if (key === 'open') return !task.done;
+      if (key === 'done') return task.done;
+      if (key === 'overdue') return !task.done && task.deadline && new Date(task.deadline).getTime() < now;
+      return true;
+    }
 
   function setFilter(key) {
     filter = key;
@@ -295,7 +292,6 @@
     }
   }
 
-  // ---------------------------------------------------------------- form tugas
 
   const form = $('taskForm');
 
@@ -369,7 +365,6 @@
     renderTasks();
   });
 
-  // ---------------------------------------------------------------- statistik
 
   function renderStats() {
     const st = S.stats;
@@ -409,7 +404,6 @@
     );
   }
 
-  // ---------------------------------------------------------------- pengaturan
 
   function renderSettings() {
     if (!S.settings) return;
@@ -431,7 +425,6 @@
     });
   });
 
-  // ---------------------------------------------------------------- init
 
   function renderAll() {
     renderBadge();
@@ -462,7 +455,6 @@
     renderAll();
   });
 
-  // Teks hitung mundur ("2 jam lagi") disegarkan berkala.
   setInterval(() => {
     renderUpcoming();
     renderTasks();

@@ -42,7 +42,6 @@ button {
   align-items: flex-start;
 }
 
-/* ---------------------------------------------------------------- notch */
 
 .notch {
   --w: 224px;
@@ -67,7 +66,6 @@ button {
   --accent: #f2e2cc;
 }
 
-/* "Telinga" melengkung di kiri-kanan atas supaya terlihat menyatu dengan tepi layar. */
 .notch::before,
 .notch::after {
   content: '';
@@ -109,7 +107,7 @@ button {
   border-radius: inherit;
 }
 
-/* ---------------------------------------------------------------- pill (ringkas) */
+
 
 .pill {
   position: absolute;
@@ -168,7 +166,8 @@ button {
   transition-duration: 0.1s;
 }
 
-/* ---------------------------------------------------------------- panel (lebar) */
+
+
 
 .panel {
   position: absolute;
@@ -486,7 +485,6 @@ button {
   color: #7d6d5b;
 }
 
-/* ---------------------------------------------------------------- alert */
 
 .alert {
   position: absolute;

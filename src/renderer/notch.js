@@ -11,7 +11,6 @@
   let collapseTimer = null;
   let alertTimer = null;
 
-  // ---------------------------------------------------------------- hover / interaksi
 
   function setInteractive(value) {
     window.api.setNotchInteractive(value);
@@ -30,11 +29,10 @@
   function scheduleCollapse() {
     clearTimeout(collapseTimer);
     collapseTimer = setTimeout(() => {
-      // Jangan menutup selagi sedang mengetik tugas baru.
-      if (document.activeElement === quick && quick.value.trim()) return;
-      notch.classList.remove('expanded');
-      if (document.activeElement === quick) quick.blur();
-    }, 380);
+        if (document.activeElement === quick && quick.value.trim()) return;
+        notch.classList.remove('expanded');
+        if (document.activeElement === quick) quick.blur();
+      }, 380);
   }
 
   notch.addEventListener('mouseenter', () => {
@@ -43,7 +41,6 @@
   });
 
   notch.addEventListener('mouseleave', () => {
-    // Lepaskan tangkapan mouse segera supaya area transparan tidak menghalangi klik ke aplikasi lain.
     setInteractive(false);
     scheduleCollapse();
   });
@@ -62,10 +59,9 @@
   });
   quick.addEventListener('blur', () => scheduleCollapse());
 
-  // ---------------------------------------------------------------- render
 
   function iconInto(id, svg) {
-    $(id).innerHTML = svg; // string statis dari NF.ICONS
+    $(id).innerHTML = svg; 
   }
 
   function buildStatic() {
@@ -162,17 +158,15 @@
     }
   }
 
-  // ---------------------------------------------------------------- banner
 
-  function showAlert({ title, body }) {
-    $('alertTitle').textContent = title;
-    $('alertBody').textContent = body;
-    if (!notch.classList.contains('expanded')) notch.classList.add('alerting');
-    clearTimeout(alertTimer);
-    alertTimer = setTimeout(() => notch.classList.remove('alerting'), 8000);
-  }
+    function showAlert({ title, body }) {
+      $('alertTitle').textContent = title;
+      $('alertBody').textContent = body;
+        if (!notch.classList.contains('expanded')) notch.classList.add('alerting');
+      clearTimeout(alertTimer);
+      alertTimer = setTimeout(() => notch.classList.remove('alerting'), 8000);
+    }
 
-  // ---------------------------------------------------------------- init
 
   buildStatic();
 
@@ -180,11 +174,11 @@
     S.timer = t;
     renderTimer();
   });
-  window.api.onData((d) => {
-    S = { ...S, ...d };
-    renderTasks();
-    renderTimer();
-  });
+    window.api.onData((d) => {
+      S = { ...S, ...d };
+      renderTasks();
+      renderTimer();
+    });
   window.api.onSound((kind) => NF.playSound(kind));
   window.api.onFlash(showAlert);
 
@@ -194,7 +188,6 @@
     renderTasks();
   });
 
-  // Hitung mundur deadline di daftar ikut diperbarui.
   setInterval(() => {
     if (notch.classList.contains('expanded') && document.activeElement !== quick) renderTasks();
   }, 30000);

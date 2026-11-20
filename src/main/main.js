@@ -14,8 +14,8 @@ const {
   nativeImage,
 } = require('electron');
 
-const { Engine } = require('./engine');
-const { Store } = require('./store');
+  const { Engine } = require('./engine');
+  const { Store } = require('./store');
 
 const ROOT = path.join(__dirname, '..', '..');
 const RENDERER = path.join(__dirname, '..', 'renderer');
@@ -23,9 +23,9 @@ const PRELOAD = path.join(__dirname, 'preload.js');
 const ICON = path.join(ROOT, 'assets', 'icon.png');
 const TRAY_ICON = path.join(ROOT, 'assets', 'tray.png');
 
-// Ukuran jendela notch (transparan). Panel yang terlihat lebih kecil dan ada di tengah atas.
-const NOTCH_W = 580;
-const NOTCH_H = 300;
+
+  const NOTCH_W = 580;
+  const NOTCH_H = 300;
 
 const MODE_LABEL = { focus: 'Fokus', short: 'Istirahat pendek', long: 'Istirahat panjang' };
 
@@ -37,7 +37,8 @@ let tray = null;
 let quitting = false;
 let lastTrayKey = '';
 
-// ---------------------------------------------------------------- util
+
+
 
 function fmt(sec) {
   const m = Math.floor(sec / 60);
@@ -67,7 +68,6 @@ function sendSound(kind) {
   }
 }
 
-// ---------------------------------------------------------------- windows
 
 function positionNotch() {
   if (!notchWin || notchWin.isDestroyed()) return;
@@ -105,17 +105,17 @@ function createNotch() {
       autoplayPolicy: 'no-user-gesture-required',
     },
   });
-  notchWin.setAlwaysOnTop(true, 'screen-saver');
-  notchWin.setIgnoreMouseEvents(true, { forward: true });
-  notchWin.removeMenu();
-  positionNotch();
-  notchWin.loadFile(path.join(RENDERER, 'notch.html'));
-  notchWin.once('ready-to-show', () => {
-    if (engine.data.settings.showNotch) notchWin.showInactive();
-  });
-  notchWin.on('closed', () => {
-    notchWin = null;
-  });
+    notchWin.setAlwaysOnTop(true, 'screen-saver');
+    notchWin.setIgnoreMouseEvents(true, { forward: true });
+    notchWin.removeMenu();
+    positionNotch();
+    notchWin.loadFile(path.join(RENDERER, 'notch.html'));
+    notchWin.once('ready-to-show', () => {
+      if (engine.data.settings.showNotch) notchWin.showInactive();
+    });
+    notchWin.on('closed', () => {
+      notchWin = null;
+    });
 }
 
 function createMain({ show = true } = {}) {
@@ -137,13 +137,13 @@ function createMain({ show = true } = {}) {
       backgroundThrottling: false,
     },
   });
-  mainWin.removeMenu();
-  mainWin.loadFile(path.join(RENDERER, 'app.html'));
-  mainWin.once('ready-to-show', () => {
-    if (show) mainWin.show();
-  });
+    mainWin.removeMenu();
+    mainWin.loadFile(path.join(RENDERER, 'app.html'));
+    mainWin.once('ready-to-show', () => {
+      if (show) mainWin.show();
+    });
 
-  // Tombol X menyembunyikan ke tray (timer tetap jalan di latar belakang).
+ 
   mainWin.on('close', (event) => {
     if (!quitting && engine.data.settings.closeToTray) {
       event.preventDefault();
@@ -161,17 +161,16 @@ function showMain(tab) {
     if (tab) mainWin.webContents.once('did-finish-load', () => mainWin.webContents.send('nav', tab));
     return;
   }
-  if (mainWin.isMinimized()) mainWin.restore();
-  mainWin.show();
-  mainWin.focus();
-  if (tab) mainWin.webContents.send('nav', tab);
+    if (mainWin.isMinimized()) mainWin.restore();
+    mainWin.show();
+    mainWin.focus();
+    if (tab) mainWin.webContents.send('nav', tab);
 }
 
 function setNotchVisible(visible) {
   engine.updateSettings({ showNotch: visible });
 }
 
-// ---------------------------------------------------------------- tray
 
 function trayMenu() {
   const t = engine.timerSnapshot();
@@ -197,13 +196,13 @@ function trayMenu() {
   ]);
 }
 
-function createTray() {
-  const img = nativeImage.createFromPath(TRAY_ICON).resize({ width: 16, height: 16 });
-  tray = new Tray(img);
-  tray.setToolTip('Kala');
-  tray.on('click', () => showMain());
-  refreshTray(true);
-}
+  function createTray() {
+    const img = nativeImage.createFromPath(TRAY_ICON).resize({ width: 16, height: 16 });
+    tray = new Tray(img);
+    tray.setToolTip('Kala');
+    tray.on('click', () => showMain());
+    refreshTray(true);
+  }
 
 function refreshTray(force = false) {
   if (!tray) return;
@@ -216,15 +215,15 @@ function refreshTray(force = false) {
   }
 }
 
-// ---------------------------------------------------------------- efek pengaturan
+
 
 function applySettings() {
   const s = engine.data.settings;
 
-  if (notchWin && !notchWin.isDestroyed()) {
-    if (s.showNotch && !notchWin.isVisible()) notchWin.showInactive();
-    if (!s.showNotch && notchWin.isVisible()) notchWin.hide();
-  }
+    if (notchWin && !notchWin.isDestroyed()) {
+      if (s.showNotch && !notchWin.isVisible()) notchWin.showInactive();
+      if (!s.showNotch && notchWin.isVisible()) notchWin.hide();
+    }
 
   if (app.isPackaged) {
     app.setLoginItemSettings({ openAtLogin: s.launchAtStartup, args: ['--hidden'] });
@@ -232,7 +231,7 @@ function applySettings() {
   refreshTray(true);
 }
 
-// ---------------------------------------------------------------- engine events
+
 
 function onEngineEvent(type, payload) {
   switch (type) {
@@ -241,27 +240,27 @@ function onEngineEvent(type, payload) {
       refreshTray();
       break;
 
-    case 'data':
-      store.save(engine.data);
-      broadcast('data', {
-        settings: engine.data.settings,
-        tasks: engine.data.tasks,
-        stats: engine.getStats(),
-      });
-      break;
+      case 'data':
+        store.save(engine.data);
+        broadcast('data', {
+          settings: engine.data.settings,
+          tasks: engine.data.tasks,
+          stats: engine.getStats(),
+        });
+        break;
 
     case 'session-complete': {
       const { finished, next, nextMinutes, autoStarted, taskTitle } = payload;
       let title;
       let body;
-      if (finished === 'focus') {
-        title = 'Sesi fokus selesai';
-        body =
-          (taskTitle ? `Kerja bagus untuk "${taskTitle}". ` : 'Kerja bagus. ') +
-          `Saatnya ${MODE_LABEL[next].toLowerCase()} ${nextMinutes} menit.`;
-      } else {
-        title = 'Istirahat selesai';
-        body = `Ayo kembali fokus selama ${nextMinutes} menit.`;
+        if (finished === 'focus') {
+          title = 'Sesi fokus selesai';
+          body =
+            (taskTitle ? `Kerja bagus untuk "${taskTitle}". ` : 'Kerja bagus. ') +
+            `Saatnya ${MODE_LABEL[next].toLowerCase()} ${nextMinutes} menit.`;
+        } else {
+          title = 'Istirahat selesai';
+          body = `Ayo kembali fokus selama ${nextMinutes} menit.`;
       }
       notify(title, body);
       sendSound(finished === 'focus' ? 'focus-end' : 'break-end');
@@ -271,20 +270,20 @@ function onEngineEvent(type, payload) {
       break;
     }
 
-    case 'deadline': {
-      const { task, kind } = payload;
-      const text =
-        kind === 'over'
-          ? `Deadline terlewat: ${task.title}`
-          : kind === 'h1'
-            ? `Kurang dari 1 jam lagi: ${task.title}`
-            : `Deadline kurang dari 24 jam: ${task.title}`;
-      notify('Pengingat deadline', task.course ? `${text} (${task.course})` : text);
-      sendSound('deadline');
-      if (notchWin && !notchWin.isDestroyed()) {
-        notchWin.webContents.send('flash', { title: 'Pengingat deadline', body: text, autoStarted: false });
-      }
-      break;
+      case 'deadline': {
+        const { task, kind } = payload;
+        const text =
+          kind === 'over'
+            ? `Deadline terlewat: ${task.title}`
+            : kind === 'h1'
+              ? `Kurang dari 1 jam lagi: ${task.title}`
+              : `Deadline kurang dari 24 jam: ${task.title}`;
+        notify('Pengingat deadline', task.course ? `${text} (${task.course})` : text);
+        sendSound('deadline');
+        if (notchWin && !notchWin.isDestroyed()) {
+          notchWin.webContents.send('flash', { title: 'Pengingat deadline', body: text, autoStarted: false });
+        }
+        break;
     }
 
     default:
@@ -305,10 +304,10 @@ function registerIpc() {
     return engine.timerSnapshot();
   });
 
-  ipcMain.handle('task:add', (_e, fields) => engine.addTask(fields));
-  ipcMain.handle('task:update', (_e, id, patch) => engine.updateTask(String(id), patch));
-  ipcMain.handle('task:toggle', (_e, id) => engine.toggleTask(String(id)));
-  ipcMain.handle('task:delete', (_e, id) => engine.deleteTask(String(id)));
+    ipcMain.handle('task:add', (_e, fields) => engine.addTask(fields));
+    ipcMain.handle('task:update', (_e, id, patch) => engine.updateTask(String(id), patch));
+    ipcMain.handle('task:toggle', (_e, id) => engine.toggleTask(String(id)));
+    ipcMain.handle('task:delete', (_e, id) => engine.deleteTask(String(id)));
 
   ipcMain.handle('settings:update', (_e, patch) => {
     const result = engine.updateSettings(patch);
@@ -323,7 +322,7 @@ function registerIpc() {
     app.quit();
   });
 
-  // Notch transparan: hanya tangkap klik saat kursor berada di atas panel notch.
+
   ipcMain.on('notch:interactive', (_e, interactive) => {
     if (!notchWin || notchWin.isDestroyed()) return;
     if (interactive) notchWin.setIgnoreMouseEvents(false);
@@ -331,7 +330,7 @@ function registerIpc() {
   });
 }
 
-// ---------------------------------------------------------------- start
+
 
 function registerShortcuts() {
   try {
@@ -343,7 +342,6 @@ function registerShortcuts() {
   }
 }
 
-/** Salin data dari versi lama (nama NotchFocus) sekali saja, kalau data baru belum ada. */
 function migrateOldData(newFile) {
   try {
     if (fs.existsSync(newFile)) return;
@@ -380,19 +378,18 @@ function boot() {
   screen.on('display-removed', positionNotch);
 }
 
-if (!app.requestSingleInstanceLock()) {
-  app.quit();
-} else {
-  app.on('second-instance', () => showMain());
-  app.on('before-quit', () => {
-    quitting = true;
-    if (store) {
-      store.save(engine.data);
-      store.flush();
-    }
-  });
+  if (!app.requestSingleInstanceLock()) {
+    app.quit();
+  } else {
+    app.on('second-instance', () => showMain());
+    app.on('before-quit', () => {
+      quitting = true;
+      if (store) {
+        store.save(engine.data);
+        store.flush();
+      }
+    });
   app.on('will-quit', () => globalShortcut.unregisterAll());
-  // Aplikasi tetap hidup di tray walau semua jendela tertutup.
   app.on('window-all-closed', () => {});
   app.whenReady().then(boot);
 }
