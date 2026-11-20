@@ -5,7 +5,7 @@ membantu mahasiswa untuk mengatur waktu dan dapat mengumpulkan tugas dengan baik
 
 ** Harapan **
 
-Harapakan kedepannya untuk aplikasi ini ada fitur pengeblokan suatu aplikasi maupun situs dalam keadaan memulai timer (fokus)
+Harapan kedepannya untuk aplikasi ini ada fitur pengeblokan suatu aplikasi maupun situs dalam keadaan memulai timer (fokus)
 
 ** Cara mengakses **
 1. Download file dalam bentuk zip
