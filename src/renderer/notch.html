@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kala Notch</title>
+    <link rel="stylesheet" href="notch.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <div id="notch" class="notch focus">
+        <div class="clip">
+          <!-- Tampilan ringkas (selalu terlihat di atas layar) -->
+          <div class="pill" id="pill">
+            <span class="dot"></span>
+            <span class="pill-time" id="pillTime">25:00</span>
+            <span class="pill-label" id="pillLabel">Fokus</span>
+          </div>
+
+          <!-- Tampilan lebar (saat kursor mendekat) -->
+          <div class="panel" id="panel">
+            <div class="head">
+              <div class="modes" id="modes"></div>
+              <div class="head-right">
+                <div class="cycle" id="cycle"></div>
+                <button class="icon-btn" id="btnOpen" title="Buka jendela utama">
+                  <span id="iconOpen"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="body">
+              <div class="left">
+                <div class="big-time" id="bigTime">25:00</div>
+                <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+                <div class="controls">
+                  <button class="ctl" id="btnReset" title="Reset"><span id="iconReset"></span></button>
+                  <button class="ctl main" id="btnToggle" title="Mulai / Jeda"><span id="iconToggle"></span></button>
+                  <button class="ctl" id="btnSkip" title="Lewati"><span id="iconSkip"></span></button>
+                </div>
+                <div class="current" id="currentTask">Belum memilih tugas</div>
+              </div>
+
+              <div class="right">
+                <div class="right-title">
+                  <span>Tugas terdekat</span>
+                  <a href="#" id="linkAll">Semua</a>
+                </div>
+                <ul class="tasks" id="taskList"></ul>
+                <input
+                  class="quick"
+                  id="quickAdd"
+                  type="text"
+                  maxlength="120"
+                  placeholder="Tambah tugas, tekan Enter"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Banner saat sesi selesai / ada pengingat -->
+          <div class="alert" id="alert">
+            <div class="alert-title" id="alertTitle"></div>
+            <div class="alert-body" id="alertBody"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="notch.js"></script>
+  </body>
+</html>

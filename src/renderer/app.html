@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kala</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ============================================ sidebar -->
+      <aside class="side">
+        <div class="brand">
+          <img src="../../assets/icon.png" alt="" />
+          <span>Kala</span>
+        </div>
+
+        <nav id="nav">
+          <button class="nav-btn active" data-tab="focus">Fokus</button>
+          <button class="nav-btn" data-tab="tasks">Tugas <span class="badge" id="badge" hidden></span></button>
+          <button class="nav-btn" data-tab="stats">Statistik</button>
+          <button class="nav-btn" data-tab="settings">Pengaturan</button>
+        </nav>
+
+        <div class="side-foot">
+          <div class="mini" id="mini">
+            <span class="mini-dot"></span>
+            <span id="miniTime">25:00</span>
+            <span class="mini-mode" id="miniMode">Fokus</span>
+          </div>
+          <p class="hint">
+            Tombol X hanya menyembunyikan jendela ke tray. Timer dan notch tetap berjalan di latar belakang.
+          </p>
+          <p class="hint keys">
+            <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>P</kbd> mulai/jeda<br />
+            <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd> notch on/off<br />
+            <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>O</kbd> buka jendela
+          </p>
+          <button class="btn ghost small" id="btnQuit">Keluar aplikasi</button>
+        </div>
+      </aside>
+
+      <main class="content">
+        <!-- ============================================ FOKUS -->
+        <section class="tab active" id="tab-focus">
+          <header class="page-head">
+            <h1>Fokus</h1>
+            <p id="focusSub">Pilih tugas, lalu mulai sesi pertamamu.</p>
+          </header>
+
+          <div class="focus-grid">
+            <div class="card timer-card">
+              <div class="seg" id="segModes"></div>
+
+              <div class="ring-wrap">
+                <svg class="ring" viewBox="0 0 260 260" aria-hidden="true">
+                  <circle class="ring-bg" cx="130" cy="130" r="116"></circle>
+                  <circle class="ring-fg" id="ringFg" cx="130" cy="130" r="116"></circle>
+                </svg>
+                <div class="ring-center">
+                  <div class="time" id="time">25:00</div>
+                  <div class="mode-label" id="modeLabel">Fokus</div>
+                </div>
+              </div>
+
+              <div class="dots" id="dots"></div>
+
+              <div class="ctrls">
+                <button class="round" id="btnReset" title="Reset"></button>
+                <button class="round big" id="btnToggle" title="Mulai / Jeda"></button>
+                <button class="round" id="btnSkip" title="Lewati sesi"></button>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="card">
+                <h3>Tugas yang difokuskan</h3>
+                <select id="taskSelect" class="field"></select>
+                <p class="muted small" id="taskMeta">Setiap sesi fokus yang selesai akan dihitung ke tugas ini.</p>
+              </div>
+
+              <div class="card">
+                <h3>Hari ini</h3>
+                <div class="mini-stats">
+                  <div><b id="todaySessions">0</b><span>sesi fokus</span></div>
+                  <div><b id="todayMinutes">0</b><span>menit fokus</span></div>
+                  <div><b id="streakNum">0</b><span>hari beruntun</span></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3>Deadline terdekat</h3>
+                <ul class="upcoming" id="upcoming"></ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================ TUGAS -->
+        <section class="tab" id="tab-tasks">
+          <header class="page-head">
+            <h1>Tugas</h1>
+            <p>Catat tugas kuliah beserta deadline-nya. Pengingat muncul 24 jam dan 1 jam sebelum deadline.</p>
+          </header>
+
+          <form class="card task-form" id="taskForm" autocomplete="off">
+            <div class="form-grid">
+              <label class="span2">
+                <span>Judul tugas</span>
+                <input class="field" id="fTitle" type="text" maxlength="120" placeholder="mis. Laporan praktikum Struktur Data" required />
+              </label>
+              <label>
+                <span>Mata kuliah</span>
+                <input class="field" id="fCourse" type="text" maxlength="60" placeholder="mis. Struktur Data" />
+              </label>
+              <label>
+                <span>Prioritas</span>
+                <select class="field" id="fPriority">
+                  <option value="low">Rendah</option>
+                  <option value="medium" selected>Sedang</option>
+                  <option value="high">Tinggi</option>
+                </select>
+              </label>
+              <label class="span2">
+                <span>Deadline</span>
+                <input class="field" id="fDeadline" type="datetime-local" />
+                <div class="chips">
+                  <button type="button" class="chip" data-quick="today">Hari ini 23:59</button>
+                  <button type="button" class="chip" data-quick="tomorrow">Besok 23:59</button>
+                  <button type="button" class="chip" data-quick="week">1 minggu lagi</button>
+                  <button type="button" class="chip" data-quick="clear">Kosongkan</button>
+                </div>
+              </label>
+              <label class="span2">
+                <span>Catatan (opsional)</span>
+                <input class="field" id="fNotes" type="text" maxlength="300" placeholder="mis. kumpul lewat LMS, format PDF" />
+              </label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn primary" id="fSubmit">Tambah tugas</button>
+              <button type="button" class="btn ghost" id="fCancel" hidden>Batal</button>
+            </div>
+          </form>
+
+          <div class="toolbar">
+            <div class="seg" id="segFilter"></div>
+            <input class="field search" id="search" type="search" placeholder="Cari tugas atau mata kuliah" />
+          </div>
+
+          <ul class="task-list" id="taskList"></ul>
+        </section>
+
+        <!-- ============================================ STATISTIK -->
+        <section class="tab" id="tab-stats">
+          <header class="page-head">
+            <h1>Statistik</h1>
+            <p>Pantau progres tugas dan kebiasaan fokusmu.</p>
+          </header>
+
+          <div class="stat-cards" id="statCards"></div>
+
+          <div class="stat-row">
+            <div class="card">
+              <h3>Progres tugas</h3>
+              <div class="donut-wrap">
+                <svg class="donut" viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="donut-bg" cx="60" cy="60" r="48"></circle>
+                  <circle class="donut-fg" id="donutFg" cx="60" cy="60" r="48"></circle>
+                </svg>
+                <div class="donut-center"><b id="donutPct">0%</b><span>selesai</span></div>
+              </div>
+              <p class="muted small center" id="donutText"></p>
+            </div>
+
+            <div class="card grow">
+              <h3>Menit fokus 7 hari terakhir</h3>
+              <div class="bars" id="bars"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================ PENGATURAN -->
+        <section class="tab" id="tab-settings">
+          <header class="page-head">
+            <h1>Pengaturan</h1>
+            <p>Atur durasi pomodoro, waktu istirahat, dan perilaku aplikasi.</p>
+          </header>
+
+          <div class="card">
+            <h3>Durasi (menit)</h3>
+            <div class="num-grid">
+              <label><span>Fokus</span><input class="field" type="number" min="1" max="180" data-setting="focusMin" /></label>
+              <label><span>Istirahat pendek</span><input class="field" type="number" min="1" max="60" data-setting="shortMin" /></label>
+              <label><span>Istirahat panjang</span><input class="field" type="number" min="1" max="90" data-setting="longMin" /></label>
+              <label><span>Istirahat panjang setiap</span><input class="field" type="number" min="2" max="12" data-setting="longEvery" /></label>
+            </div>
+            <p class="muted small">
+              Contoh klasik: 25 menit fokus, 5 menit istirahat pendek, 15 menit istirahat panjang setiap 4 sesi.
+              Perubahan berlaku pada sesi berikutnya (atau langsung jika timer belum dimulai).
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Perilaku timer</h3>
+            <label class="switch"><input type="checkbox" data-setting="autoStartBreak" /><i></i><span>Mulai istirahat otomatis setelah sesi fokus</span></label>
+            <label class="switch"><input type="checkbox" data-setting="autoStartFocus" /><i></i><span>Mulai fokus otomatis setelah istirahat</span></label>
+            <label class="switch"><input type="checkbox" data-setting="sound" /><i></i><span>Bunyi saat sesi selesai dan saat ada pengingat</span></label>
+            <label class="switch"><input type="checkbox" data-setting="notifications" /><i></i><span>Notifikasi Windows</span></label>
+            <div class="row-actions">
+              <button class="btn ghost small" id="btnTestSound">Uji suara</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Aplikasi</h3>
+            <label class="switch"><input type="checkbox" data-setting="showNotch" /><i></i><span>Tampilkan notch di atas layar</span></label>
+            <label class="switch"><input type="checkbox" data-setting="closeToTray" /><i></i><span>Tombol X menyembunyikan ke tray (tidak menutup aplikasi)</span></label>
+            <label class="switch"><input type="checkbox" data-setting="launchAtStartup" /><i></i><span>Jalankan otomatis saat Windows menyala (hanya pada versi hasil build)</span></label>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
