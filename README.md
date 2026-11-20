@@ -8,7 +8,6 @@ membantu mahasiswa untuk mengatur waktu dan dapat mengumpulkan tugas dengan baik
 Harapakan kedepannya untuk aplikasi ini ada fitur pengeblokan suatu aplikasi maupun situs dalam keadaan memulai timer (fokus)
 
 ** Cara mengakses **
-
 1. Download file dalam bentuk zip
 2. Extract file dan masuk ke dalam file kala-main
 3. lalu buka cmd dari folder tersebut
